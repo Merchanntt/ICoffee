@@ -1,0 +1,35 @@
+{
+  "Coffees": [
+    {
+      "id": 1,
+      "CoffeShopImage": "https://upload.wikimedia.org/wikipedia/en/thumb/d/d3/Starbucks_Corporation_Logo_2011.svg/1200px-Starbucks_Corporation_Logo_2011.svg.png",
+      "CoffeShop": "Starbucks",
+      "CoffeShopAddress": "Central and Hillside",
+      "CoffeImage": "https://globalassets.starbucks.com/assets/bdc7fcf962884211ab83918d34f73393.jpg?impolicy=1by1_wide_1242",
+      "CoffeName": "Caramel Ribbon Crunch Freppuccino®",
+      "CoffeCategory": "Blended Beverage",
+      "CoffeDescription": "Buttery caramel syrup blended with coffee, milk and ice, then topped with a layer of dark caramel sauce, whipped cream, caramel drizzle and a crunchy caramel-sugar topping—oh-so-beautifully delicious."
+    },
+    {
+      "id": 2,
+      "CoffeShopImage": "https://upload.wikimedia.org/wikipedia/en/thumb/d/d3/Starbucks_Corporation_Logo_2011.svg/1200px-Starbucks_Corporation_Logo_2011.svg.png",
+      "CoffeShop": "Starbucks",
+      "CoffeShopAddress": "Central and Hillside",
+      "CoffeImage": "https://globalassets.starbucks.com/assets/c8d2c8fa22ee4f4c864dee6dac5a1868.jpg?impolicy=1by1_wide_1242",
+      "CoffeName": "Starbucks Doubleshot® on Ice",
+      "CoffeCategory": "Cold Coffees",
+      "CoffeDescription": "Made with the rich, full-bodied espresso you love that's been chilled and mellowed with a touch of milk and sweetness. This on-the-go drink is delightfully and deliciously convenient."
+    },
+    {
+      "id": 3,
+      "CoffeShopImage": "https://upload.wikimedia.org/wikipedia/en/thumb/d/d3/Starbucks_Corporation_Logo_2011.svg/1200px-Starbucks_Corporation_Logo_2011.svg.png",
+      "CoffeShop": "Starbucks",
+      "CoffeShopAddress": "Central and Hillside",
+      "CoffeImage": "https://globalassets.starbucks.com/assets/ec519dd5642c41629194192cce582135.jpg?impolicy=1by1_wide_1242",
+      "CoffeName": "Espresso",
+      "CoffeCategory": "Hot Coffees",
+      "CoffeDescription": "Our smooth signature Espresso Roast with rich flavor and caramelly sweetness is at the very heart of everything we do."
+
+    }
+  ]
+}

@@ -8,8 +8,8 @@ export const Header = styled.View`
   margin-top: 20px;
   align-items: center;
   justify-content: space-between;
-  padding-right: 20px;
-  padding-left: 20px;
+  padding-right: 10px;
+  padding-left: 10px;
 `;
 
 export const DeliveryContainer = styled.View`
