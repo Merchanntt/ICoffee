@@ -26,10 +26,14 @@ interface CoffeesData {
   CoffeCategory: string;
 }
 
+interface HighlightListProps {
+  scrollListY: any;
+}
+
 const AnimatedList = Animated.createAnimatedComponent(Highlight)
 const AnimatedMain = Animated.createAnimatedComponent(Main)
 
-const HighlightList: React.FC = () => {
+const HighlightList: React.FC<HighlightListProps> = ({scrollListY}) => {
   const [CoffesList, setCoffesList] = useState<CoffeesData[]>([])
   const scrollX = new Animated.Value(0)
 
@@ -41,11 +45,19 @@ const HighlightList: React.FC = () => {
     loadData()
   }, [] )
 
-  const scale = scrollX.interpolate({
+  const height = scrollListY.interpolate({
     inputRange: [0, 150],
-    outputRange: [1, 0.8],
+    outputRange: [330, 250],
     extrapolate: 'clamp'
   })
+
+  const width = scrollListY.interpolate({
+    inputRange: [0, 150],
+    outputRange: [230, 170],
+    extrapolate: 'clamp'
+  })
+
+  const snapRange = width === 170 ? 0 : 240; 
 
   return (
     <Container>
@@ -53,19 +65,34 @@ const HighlightList: React.FC = () => {
         data={CoffesList}
         horizontal
         keyExtractor= {(item) => item.id}
+        snapToInterval= {snapRange}
         scrollEventThrottle= {16}
+        decelerationRate= {0}
         showsHorizontalScrollIndicator= {false}
         onScroll={Animated.event(
           [
             {nativeEvent: {contentOffset: {x: scrollX}}}
           ],
-          {useNativeDriver: true}
+          {useNativeDriver: false}
         )}
-        renderItem = {({ item }) => (
+        renderItem = {({ item, index }) => {
+          const inputRange = [
+            (index - 1) * 330,  
+            index * 330,  
+            (index + 1) * 330,  
+          ];
+
+          const scale = scrollX.interpolate({
+            inputRange,
+            outputRange: [0.9, 1, 0.9],
+            extrapolate: 'clamp'
+          })
+
+          return (
           <AnimatedMain 
             source={{uri: item.CoffeImage}} 
             imageStyle={{borderRadius: 8}}
-            style= {{transform: [{scale}]}}
+            style= {{transform: [{scale}], height, width}}
           >
             <Header>
               <CoffeShopImage source={{uri: item.CoffeShopImage}}/>
@@ -79,7 +106,7 @@ const HighlightList: React.FC = () => {
               <BeverageCategory>{item.CoffeCategory}</BeverageCategory>
             </Footer>
           </AnimatedMain>
-      )}
+      )}}
       />
     </Container>
   );

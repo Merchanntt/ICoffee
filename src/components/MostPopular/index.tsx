@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { Animated } from 'react-native'
 import api from '../../services/api';
+
+import HighlightList from '../../components/HighlightList';
 
 import { 
   Container,
@@ -13,6 +16,8 @@ import {
   CoffeeShopImage,
 } from './styles';
 
+const ScrollContainer = Animated.createAnimatedComponent(ScrollList);
+
 interface CoffeesInfo {
   id: number;
   CoffeShopImage: string;
@@ -24,6 +29,8 @@ interface CoffeesInfo {
 const MostPopularList: React.FC = () => {
   const [CoffesList, setCoffesList] = useState<CoffeesInfo[]>([])
 
+  const scrollY = new Animated.Value(0)
+
   useEffect(() => {
     async function loadData() {
       const response = await api.get<CoffeesInfo[]>('Coffees')
@@ -33,10 +40,20 @@ const MostPopularList: React.FC = () => {
   }, [] )
 
   return (
+    <>
+    <HighlightList scrollListY={scrollY}/>
     <Container>
     <ListTitle>Produtos mais vendidos</ListTitle>
-    <ScrollList
+    <ScrollContainer
       showsVerticalScrollIndicator={false}
+      scrollEventThrottle= {16}
+      bounces={false}
+      onScroll={Animated.event(
+        [
+          {nativeEvent: {contentOffset: {y: scrollY}}}
+        ],
+        {useNativeDriver: false}
+      )}
     >
       {CoffesList.map((item: CoffeesInfo) => (
         <ItemContainer key={item.id}>
@@ -48,8 +65,9 @@ const MostPopularList: React.FC = () => {
           <CoffeeShopImage source={{uri: item.CoffeShopImage}}/>
         </ItemContainer>
       ))}
-      </ScrollList>
+      </ScrollContainer>
     </Container>
+    </>
   );
 }
 

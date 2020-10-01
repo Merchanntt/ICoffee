@@ -10,8 +10,6 @@ export const Highlight = styled.FlatList`
 `
 
 export const Main= styled.ImageBackground`
-  height: 330px;
-  width: 230px;
   border-radius: 8px;
   margin-right: 10px;
   box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
