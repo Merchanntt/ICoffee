@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Animated } from 'react-native'
+import { useNavigation } from '@react-navigation/native';
 import api from '../../services/api';
 
 import HighlightList from '../../components/HighlightList';
@@ -29,6 +30,8 @@ interface CoffeesInfo {
 const MostPopularList: React.FC = () => {
   const [CoffesList, setCoffesList] = useState<CoffeesInfo[]>([])
 
+  const { navigate } = useNavigation()
+
   const scrollY = new Animated.Value(0)
 
   useEffect(() => {
@@ -38,6 +41,10 @@ const MostPopularList: React.FC = () => {
     }
     loadData()
   }, [] )
+
+  const handleNavigateToDetail = useCallback((data) => {
+    navigate('Detail', {data})
+  }, [navigate])
 
   return (
     <>
@@ -56,7 +63,7 @@ const MostPopularList: React.FC = () => {
       )}
     >
       {CoffesList.map((item: CoffeesInfo) => (
-        <ItemContainer key={item.id}>
+        <ItemContainer key={String(item.id)} onPress={() => handleNavigateToDetail(item)}>
           <CoffeeImage source={{uri: item.CoffeImage}}/>
           <CoffeeInfo>
             <CoffeName>{item.CoffeName}</CoffeName>

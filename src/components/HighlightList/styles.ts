@@ -7,6 +7,7 @@ export const Highlight = styled.FlatList`
   margin-left: 10px;
   margin-top: 10px;
   padding-bottom: 20px;
+  overflow: visible;
 `
 
 export const Main= styled.ImageBackground`

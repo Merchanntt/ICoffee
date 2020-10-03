@@ -28,10 +28,9 @@ import {
 
 interface CoffeesInfo {
   id: number;
-  CoffeShopImage: string;
   CoffeImage: string;
   CoffeName: string;
-  CoffeDescription: string;
+  price: string;
 }
 
 const Cart: React.FC = () => {
@@ -57,7 +56,7 @@ const Cart: React.FC = () => {
           <CoffeeInfo>
             <CoffeName>{item.CoffeName}</CoffeName>
             <CoffeDescription>Quantidade 2</CoffeDescription>
-            <CoffePrice>R$: 15,00</CoffePrice>
+            <CoffePrice>R$: {item.price}</CoffePrice>
           </CoffeeInfo>
           <RemoveButton>
             <RemoveButtonText>Remover</RemoveButtonText>

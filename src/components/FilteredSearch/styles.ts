@@ -1,20 +1,10 @@
-import { BorderlessButton } from 'react-native-gesture-handler';
 import styled from 'styled-components/native'
+import { BorderlessButton } from 'react-native-gesture-handler';
 
-export const Container = styled.View`
-  flex: 1;
+export const SearchList = styled.FlatList`
   padding-right: 10px;
   padding-left: 10px;
-`
-
-export const ScrollList = styled.ScrollView`
-  flex: 1;
-  padding-bottom: 10px;
-`;
-
-export const ListTitle = styled.Text`
-  font-size: 16px;
-  font-weight: bold;
+  width: 375px;
 `;
 
 export const ItemContainer = styled(BorderlessButton)`
@@ -39,7 +29,7 @@ export const CoffeeInfo = styled.View`
 
 export const CoffeName = styled.Text`
   font-size: 14px;
-  max-width: 200px;
+  max-width: 180px;
   margin-bottom: 6px;
   font-weight: 500;
   color: #88888a;
@@ -51,11 +41,11 @@ export const CoffeDescription = styled.Text`
   color: #88888a;
 `;
 
-export const CoffeeShopImage = styled.Image`
+export const CoffePrice = styled.Text`
+  color: #10d1a4;
+  font-weight: 500;
+  margin-top: 6px;
   position: absolute;
-  width: 24px;
-  height: 24px;
-  border-radius: 10px;
-  top: 10px;
-  right: 10px;
+  top: 5px;
+  right: 20px;
 `;

@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import {Animated} from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import {Animated, TouchableWithoutFeedback} from 'react-native'
+
 import api from '../../services/api';
 
 import { 
@@ -26,6 +28,10 @@ interface CoffeesData {
   CoffeCategory: string;
 }
 
+interface ItemId {
+  id: number;
+}
+
 interface HighlightListProps {
   scrollListY: any;
 }
@@ -35,6 +41,8 @@ const AnimatedMain = Animated.createAnimatedComponent(Main)
 
 const HighlightList: React.FC<HighlightListProps> = ({scrollListY}) => {
   const [CoffesList, setCoffesList] = useState<CoffeesData[]>([])
+
+  const {navigate} = useNavigation()
   const scrollX = new Animated.Value(0)
 
   useEffect(() => {
@@ -44,6 +52,10 @@ const HighlightList: React.FC<HighlightListProps> = ({scrollListY}) => {
     }
     loadData()
   }, [] )
+
+  const handleNavigateDetailsPage = useCallback((data) => {
+    navigate('Detail', {data})
+  }, [])
 
   const height = scrollListY.interpolate({
     inputRange: [0, 150],
@@ -57,15 +69,13 @@ const HighlightList: React.FC<HighlightListProps> = ({scrollListY}) => {
     extrapolate: 'clamp'
   })
 
-  const snapRange = width === 170 ? 0 : 240; 
-
   return (
     <Container>
       <AnimatedList 
         data={CoffesList}
         horizontal
-        keyExtractor= {(item) => item.id}
-        snapToInterval= {snapRange}
+        keyExtractor= {(item: ItemId) => String(item.id)}
+        snapToInterval= {240}
         scrollEventThrottle= {16}
         decelerationRate= {0}
         showsHorizontalScrollIndicator= {false}
@@ -77,18 +87,21 @@ const HighlightList: React.FC<HighlightListProps> = ({scrollListY}) => {
         )}
         renderItem = {({ item, index }) => {
           const inputRange = [
-            (index - 1) * 330,  
-            index * 330,  
-            (index + 1) * 330,  
+            (index - 1) * 240,  
+            index * 240,  
+            (index + 1) * 240,  
           ];
 
           const scale = scrollX.interpolate({
             inputRange,
-            outputRange: [0.9, 1, 0.9],
+            outputRange: [0.9, 1, 1],
             extrapolate: 'clamp'
           })
 
           return (
+          <TouchableWithoutFeedback 
+            onPress={() => handleNavigateDetailsPage(item)}
+          >
           <AnimatedMain 
             source={{uri: item.CoffeImage}} 
             imageStyle={{borderRadius: 8}}
@@ -106,6 +119,7 @@ const HighlightList: React.FC<HighlightListProps> = ({scrollListY}) => {
               <BeverageCategory>{item.CoffeCategory}</BeverageCategory>
             </Footer>
           </AnimatedMain>
+          </TouchableWithoutFeedback>
       )}}
       />
     </Container>

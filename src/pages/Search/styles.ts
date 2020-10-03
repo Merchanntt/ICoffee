@@ -1,16 +1,16 @@
+import { BorderlessButton } from 'react-native-gesture-handler';
 import styled from 'styled-components/native'
 
 export const Container = styled.View`
   flex: 1;
-  padding-left: 10px;
-  padding-right: 10px;
 `
 
 export const Header = styled.View`
-  flex: 1;
   justify-content: flex-start;
   align-items: center;
   margin-top: 30px;
+  padding-left: 10px;
+  padding-right: 10px;
 `;
 
 export const Title = styled.Text`
@@ -36,4 +36,31 @@ export const SearchInput = styled.TextInput`
   font-size: 14px;
   width: 200px;
   margin-right: auto;
+`;
+
+export const CategoriesList = styled.FlatList`
+  position: relative;
+  height: 40px;
+  margin-top: 20px;
+  margin-left: 40px;
+  overflow: visible;
+`;
+
+export const CategoriesListButton = styled(BorderlessButton)`
+  margin-right: 40px;
+`;
+
+export const CategoriesListButtonText = styled.Text`
+  color: #10d1a4;
+  font-size: 12px;
+  font-weight: 500;
+`;
+
+export const Border = styled.View`
+  width: 100%;
+  height: 2px;
+  background-color: #E6E6F0;
+  position: absolute;
+  margin-left: -40px;
+  bottom: 0;
 `;
