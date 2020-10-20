@@ -1,6 +1,8 @@
 import styled from 'styled-components/native'
 
 export const Container = styled.View`
+  position: absolute;
+  margin-top: 100px;
 `
 
 export const Highlight = styled.FlatList`

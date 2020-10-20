@@ -42,7 +42,7 @@ export const AddressInfo = styled.Text`
   line-height: 18px;
 `;
 
-export const ProfileImage = styled.View`
+export const ProfileImage = styled.Image`
   width: 50px;
   height: 50px;
   border-radius: 25px;

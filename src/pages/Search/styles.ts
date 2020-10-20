@@ -1,12 +1,19 @@
 import { BorderlessButton } from 'react-native-gesture-handler';
-import styled from 'styled-components/native'
+import styled, { css } from 'styled-components/native'
+
+interface SelectedCategory {
+  isSelected: boolean;
+}
+
+interface SelectedCategoryText {
+  isSelected: boolean;
+}
 
 export const Container = styled.View`
   flex: 1;
 `
 
 export const Header = styled.View`
-  justify-content: flex-start;
   align-items: center;
   margin-top: 30px;
   padding-left: 10px;
@@ -39,28 +46,39 @@ export const SearchInput = styled.TextInput`
 `;
 
 export const CategoriesList = styled.FlatList`
-  position: relative;
   height: 40px;
-  margin-top: 20px;
+  max-height: 40px;
+  margin-top: 14px;
   margin-left: 40px;
   overflow: visible;
 `;
 
 export const CategoriesListButton = styled(BorderlessButton)`
-  margin-right: 40px;
+  flex-direction: column;
+  margin-right: 32px;
+  margin-top: 8px;
 `;
 
-export const CategoriesListButtonText = styled.Text`
-  color: #10d1a4;
+export const GreenBorder = styled.View<SelectedCategory>`
+  ${(props) => props.isSelected && css`
+    background-color: #10d1a4;
+    width: 100%;
+    height: 2px;
+    margin-top: 6px;
+  `}
+`;
+
+export const CategoriesListButtonText = styled.Text<SelectedCategoryText>`
+  color: #88888a;
   font-size: 12px;
   font-weight: 500;
+  ${(props) => props.isSelected && css`
+    color: #10d1a4;
+  `}
 `;
 
 export const Border = styled.View`
   width: 100%;
   height: 2px;
   background-color: #E6E6F0;
-  position: absolute;
-  margin-left: -40px;
-  bottom: 0;
 `;

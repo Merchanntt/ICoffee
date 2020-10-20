@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
+import {Dimensions} from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import api from '../../services/api';
 
@@ -23,16 +24,26 @@ interface ItemId {
   id: number;
 }
 
-const FilteredSearch: React.FC = () => {
+interface FilteredSearchProps {
+  searchValue: string;
+  categoryValue: string;
+}
+
+const FilteredSearch: React.FC<FilteredSearchProps> = ({categoryValue, searchValue}) => {
   const [searchedCoffes, setSearchedCoffes] = useState<SeachedCoffesData[]>([])
 
   const {navigate} = useNavigation()
   
   useEffect(() => {
-    api.get('Coffees').then(response => {
+    api.get('Coffees', {
+      params: {
+        CoffeName_like: searchValue,
+        CoffeCategory_like: categoryValue === 'Todos' ? '' : categoryValue
+      }
+    }).then(response => {
       setSearchedCoffes(response.data)
     })
-  }, [])
+  }, [searchValue])
 
   const handleNavigateToDetails = useCallback((data) => {
     navigate('Detail', {data})
@@ -42,6 +53,9 @@ const FilteredSearch: React.FC = () => {
     <SearchList 
       data={searchedCoffes}
       showsVerticalScrollIndicator={false}
+      style={{
+        width: Dimensions.get('window').width,
+      }}
       keyExtractor= {(item: ItemId) => String(item.id)}
       renderItem= {({ item }) => (
         <ItemContainer onPress={() => handleNavigateToDetails(item)}>

@@ -4,7 +4,7 @@ import { BorderlessButton } from 'react-native-gesture-handler';
 export const SearchList = styled.FlatList`
   padding-right: 10px;
   padding-left: 10px;
-  width: 375px;
+  min-height: 100%;
 `;
 
 export const ItemContainer = styled(BorderlessButton)`

@@ -11,7 +11,7 @@ const Routes: React.FC = () => {
   return (
     <NavigationContainer>
       <Navigator screenOptions={{headerShown: false}}>
-        <Screen name='Dashboard' component={TabRoutes}/>
+        <Screen name='Dashboard' component={TabRoutes} />
         <Screen name='Detail' component={Detail}/>
       </Navigator>
     </NavigationContainer>

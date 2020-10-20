@@ -7,12 +7,15 @@ import Search from '../../pages/Search';
 import Cart from '../../pages/Cart';
 import Profile from '../../pages/Profile';
 import { Platform } from 'react-native';
+import { styles } from '../../components/BottomSheet/styles';
 
 const {Navigator, Screen} = createBottomTabNavigator()
 
+
 const TabRoutes: React.FC = () => {
   return (
-      <Navigator tabBarOptions={{
+      <Navigator 
+      tabBarOptions={{
         style: {
           elevation: 0,
           shadowOpacity: 0,
@@ -44,7 +47,8 @@ const TabRoutes: React.FC = () => {
         activeBackgroundColor: '#c2f4eb',
         activeTintColor: '#10d1a4',
         inactiveTintColor: '#c1bccc'
-      }}>
+      }
+      }>
         <Screen 
           name='Home' 
           component={Home}
@@ -52,7 +56,7 @@ const TabRoutes: React.FC = () => {
             tabBarLabel: '',
             tabBarIcon: ({color, size, focused}) => (
               <Feather name='home' size={size} color={focused ? '#10d1a4' : color }/>
-            )
+            ),
           }}
         />
         <Screen 

@@ -1,10 +1,9 @@
 import React from 'react';
-import { View } from 'react-native';
+import {View} from 'react-native'
 
-// import { Container } from './styles';
 
 const Profile: React.FC = () => {
-  return <View />;
+  return <View />
 }
 
 export default Profile;

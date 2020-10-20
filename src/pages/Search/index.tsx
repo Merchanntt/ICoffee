@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Dimensions, ScrollView } from 'react-native';
 import {Feather} from '@expo/vector-icons'
-import { BorderlessButton, ScrollView } from 'react-native-gesture-handler';
 
 import FilteredSearch from '../../components/FilteredSearch';
 
@@ -13,6 +13,7 @@ import {
   CategoriesList,
   CategoriesListButton,
   CategoriesListButtonText,
+  GreenBorder,
   Border,
 } from './styles';
 import api from '../../services/api';
@@ -25,10 +26,17 @@ interface CategoriesListData {
 const Search: React.FC = () => {
   const [categories, setCategories] = useState<CategoriesListData[]>([])
 
+  const [searchValue, setSearchValue] = useState('')
+  const [isSelected, setSelected] = useState(0)
+
   useEffect(() => {
     api.get('Categories').then(response => {
       setCategories(response.data)
     })
+  }, [])
+
+  const handleIsSelectedCategory = useCallback((CategoryIndex: number) => {
+      setSelected(CategoryIndex)
   }, [])
 
   return (
@@ -40,10 +48,10 @@ const Search: React.FC = () => {
           <SearchInput 
             placeholder='Encontre seu café'
             placeholderTextColor='#88888a'
+            value= {searchValue}
+            onChangeText= {setSearchValue}
           />
-          <BorderlessButton>
             <Feather name='coffee' size={20} color='#10d1a4'/>
-          </BorderlessButton>
         </SearchContainer>
       </Header>
         <CategoriesList 
@@ -51,26 +59,28 @@ const Search: React.FC = () => {
           horizontal
           showsHorizontalScrollIndicator={false}
           keyExtractor={item => item.id}
-          renderItem= {({item}) => (
+          renderItem= {({item, index}) => (
             <>
-              <CategoriesListButton>
-                <CategoriesListButtonText>{item.CategoryName}</CategoriesListButtonText>
+              <CategoriesListButton 
+                onPress={() => handleIsSelectedCategory(index)}>
+                <CategoriesListButtonText
+                  isSelected={index === isSelected}
+                >{item.CategoryName}</CategoriesListButtonText>
+                <GreenBorder isSelected={index === isSelected} />
               </CategoriesListButton>
-              <Border />
             </>
           )}
         />
+        <Border />
         <ScrollView
           horizontal
-          snapToInterval={375}
+          snapToInterval={Dimensions.get('window').width}
           showsHorizontalScrollIndicator={false}
           decelerationRate= {0}
         >
-          <FilteredSearch />
-          <FilteredSearch />
-          <FilteredSearch />
-          <FilteredSearch />
-          <FilteredSearch />
+          {categories.map(category => (
+            <FilteredSearch key={category.id} searchValue={searchValue} categoryValue={category.CategoryName}/>
+          ))}
         </ScrollView>
     </Container>
   );

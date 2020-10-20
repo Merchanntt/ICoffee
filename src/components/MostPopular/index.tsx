@@ -16,8 +16,10 @@ import {
   CoffeeInfo,
   CoffeeShopImage,
 } from './styles';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const ScrollContainer = Animated.createAnimatedComponent(ScrollList);
+const AnimatedContainer = Animated.createAnimatedComponent(Container);
 
 interface CoffeesInfo {
   id: number;
@@ -46,15 +48,22 @@ const MostPopularList: React.FC = () => {
     navigate('Detail', {data})
   }, [navigate])
 
+  const marginTop = scrollY.interpolate({
+    inputRange: [0, 150],
+    outputRange: [360, 270],
+    extrapolate: 'clamp'
+  })
+
   return (
     <>
     <HighlightList scrollListY={scrollY}/>
-    <Container>
+    <AnimatedContainer
+      style={{marginTop}}
+    >
     <ListTitle>Produtos mais vendidos</ListTitle>
     <ScrollContainer
       showsVerticalScrollIndicator={false}
       scrollEventThrottle= {16}
-      bounces={false}
       onScroll={Animated.event(
         [
           {nativeEvent: {contentOffset: {y: scrollY}}}
@@ -62,8 +71,12 @@ const MostPopularList: React.FC = () => {
         {useNativeDriver: false}
       )}
     >
+ 
       {CoffesList.map((item: CoffeesInfo) => (
-        <ItemContainer key={String(item.id)} onPress={() => handleNavigateToDetail(item)}>
+        <ItemContainer 
+          key={String(item.id)} 
+          onPress={() => handleNavigateToDetail(item)}
+        >
           <CoffeeImage source={{uri: item.CoffeImage}}/>
           <CoffeeInfo>
             <CoffeName>{item.CoffeName}</CoffeName>
@@ -73,7 +86,7 @@ const MostPopularList: React.FC = () => {
         </ItemContainer>
       ))}
       </ScrollContainer>
-    </Container>
+    </AnimatedContainer>
     </>
   );
 }
