@@ -1,27 +1,47 @@
-import React, { useContext} from 'react';
-import { View } from 'react-native';
+import React, { useContext } from 'react';
+import {Animated} from 'react-native';
+import { Host } from 'react-native-portalize';
+
+import { StatusBar } from 'expo-status-bar';
 
 import Header from '../../components/Delivery';
 import MostPopularList from '../../components/MostPopular';
-import { ModalizeContext } from '../../components/BottomSheet'
+import { ModalizeContext } from '../../components/BottomSheet';
 
 import { 
   Container,
-  Main,
 } from './styles';
-import { StatusBar } from 'expo-status-bar';
+
+const ContainerAnimated = Animated.createAnimatedComponent(Container)
 
 const Home: React.FC = () => {
-  const { modalOpen } = useContext(ModalizeContext)
+  const { modalOpen, animated } = useContext(ModalizeContext)
+
+  const scale = animated.interpolate({
+    inputRange: [0, 1], 
+    outputRange: [1, 0.92],
+  })
+
+  const borderRadius = animated.interpolate({
+    inputRange: [0, 1], 
+    outputRange: [0, 20],
+  })
+
+  const translateY = animated.interpolate({
+    inputRange: [0, 1], 
+    outputRange: [0, 10],
+  })
 
   return (
-    <Container >
-      <StatusBar style={modalOpen ? 'light' : 'dark'}/>
-      <Main ModelIsOpen={modalOpen}>
-        <Header />
-        <MostPopularList />
-      </Main>
-    </Container>
+    <Host style={{backgroundColor: '#000'}}>
+      <ContainerAnimated ModelIsOpen={modalOpen} style={{
+        transform: [{ scale, translateY }], borderRadius
+      }}>
+        <StatusBar style={modalOpen ? 'light' : 'dark'}/>
+          <Header />
+          <MostPopularList />
+      </ContainerAnimated>
+    </Host>
   );
 }
 

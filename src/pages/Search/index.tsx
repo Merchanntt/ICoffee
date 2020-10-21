@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Dimensions, ScrollView } from 'react-native';
 import {Feather} from '@expo/vector-icons'
 
@@ -24,6 +24,8 @@ interface CategoriesListData {
 }
 
 const Search: React.FC = () => {
+  const scrollable = useRef<ScrollView>(null)
+  
   const [categories, setCategories] = useState<CategoriesListData[]>([])
 
   const [searchValue, setSearchValue] = useState('')
@@ -36,8 +38,16 @@ const Search: React.FC = () => {
   }, [])
 
   const handleIsSelectedCategory = useCallback((CategoryIndex: number) => {
+    const scrollingRange = Dimensions.get('window').width * CategoryIndex
+
       setSelected(CategoryIndex)
+      scrollable.current?.scrollTo({x: scrollingRange, y: 0, animated: true})
   }, [])
+
+  const handleSetSelectedCategory = useCallback(() => {
+    // setSelected(isSelected - 1)
+  }, [])
+
 
   return (
     <Container>
@@ -74,12 +84,18 @@ const Search: React.FC = () => {
         <Border />
         <ScrollView
           horizontal
+          ref={scrollable}
           snapToInterval={Dimensions.get('window').width}
           showsHorizontalScrollIndicator={false}
           decelerationRate= {0}
+          onMomentumScrollEnd={handleSetSelectedCategory}
         >
           {categories.map(category => (
-            <FilteredSearch key={category.id} searchValue={searchValue} categoryValue={category.CategoryName}/>
+              <FilteredSearch 
+                key={category.id}
+                searchValue={searchValue} 
+                categoryValue={category.CategoryName}
+              />
           ))}
         </ScrollView>
     </Container>

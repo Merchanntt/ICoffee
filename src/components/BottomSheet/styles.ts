@@ -18,4 +18,10 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     backgroundColor: '#c2f4eb',
   },
+
+  description: {
+    color: '#88888a',
+    fontWeight: '500'
+  },
+  
 })

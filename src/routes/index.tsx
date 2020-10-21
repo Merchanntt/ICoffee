@@ -10,7 +10,7 @@ const {Navigator, Screen} = createStackNavigator()
 const Routes: React.FC = () => {
   return (
     <NavigationContainer>
-      <Navigator screenOptions={{headerShown: false}}>
+      <Navigator screenOptions={{headerShown: false, cardStyle:{backgroundColor: '#fff'}}}>
         <Screen name='Dashboard' component={TabRoutes} />
         <Screen name='Detail' component={Detail}/>
       </Navigator>

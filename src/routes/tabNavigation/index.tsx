@@ -7,18 +7,19 @@ import Search from '../../pages/Search';
 import Cart from '../../pages/Cart';
 import Profile from '../../pages/Profile';
 import { Platform } from 'react-native';
-import { styles } from '../../components/BottomSheet/styles';
 
 const {Navigator, Screen} = createBottomTabNavigator()
-
 
 const TabRoutes: React.FC = () => {
   return (
       <Navigator 
       tabBarOptions={{
         style: {
-          elevation: 0,
-          shadowOpacity: 0,
+          shadowOffset: {height: 2, width: 1},
+          shadowColor: '#000',
+          shadowOpacity: 0.2,
+          shadowRadius: 4,
+          borderTopWidth: 0,
           height: Platform.OS === 'ios' ? 60 : 0,
           borderTopLeftRadius: 25,
           borderTopRightRadius: 25,

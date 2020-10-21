@@ -11,6 +11,7 @@ interface SelectedCategoryText {
 
 export const Container = styled.View`
   flex: 1;
+  background-color: #fff;
 `
 
 export const Header = styled.View`

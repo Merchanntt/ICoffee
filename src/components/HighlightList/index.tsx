@@ -69,13 +69,19 @@ const HighlightList: React.FC<HighlightListProps> = ({scrollListY}) => {
     extrapolate: 'clamp'
   })
 
+  const snap = scrollListY.interpolate({
+    inputRange: [0, 150],
+    outputRange: [240, 180],
+    extrapolate: 'clamp'
+  })
+
   return (
     <Container>
       <AnimatedList 
         data={CoffesList}
         horizontal
         keyExtractor= {(item: ItemId) => String(item.id)}
-        snapToInterval= {240}
+        snapToInterval= {snap}
         scrollEventThrottle= {16}
         decelerationRate= {0}
         showsHorizontalScrollIndicator= {false}

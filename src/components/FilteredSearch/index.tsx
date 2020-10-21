@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useCallback} from 'react';
-import {Dimensions} from 'react-native'
+import React, {useState, useEffect, useCallback } from 'react';
+import {Dimensions, FlatListProps} from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import api from '../../services/api';
 
@@ -29,7 +29,7 @@ interface FilteredSearchProps {
   categoryValue: string;
 }
 
-const FilteredSearch: React.FC<FilteredSearchProps> = ({categoryValue, searchValue}) => {
+const FilteredSearch: React.FC<FilteredSearchProps> = ({ categoryValue, searchValue }) => {
   const [searchedCoffes, setSearchedCoffes] = useState<SeachedCoffesData[]>([])
 
   const {navigate} = useNavigation()
