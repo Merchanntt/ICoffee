@@ -1,8 +1,14 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { BorderlessButton, ScrollView } from 'react-native-gesture-handler';
+import { BorderlessButton } from 'react-native-gesture-handler';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { Feather } from '@expo/vector-icons'
+import { Feather } from '@expo/vector-icons';
+import Lottie from 'lottie-react-native';
+import {useDispatch} from 'react-redux';
+
+import { FormatedPrice } from '../../services/formatedPrice';
+import { addProductsToCart } from '../../store/modules/cart/actions';
+import HeartAnimation from '../../assets/HeartAnimation.json';
 
 import { 
   Container,
@@ -19,6 +25,8 @@ import {
   OptionsCoffePrice,
   OptionsSelection,
   CupsSize,
+  CupSizeTextButton,
+  CupSizeText,
   QuantityContainer,
   SumButtons,
   SumButtonsText,
@@ -45,10 +53,54 @@ interface CoffeesData {
 const Details: React.FC = () => {
   const route = useRoute()
   const {goBack} = useNavigation()
+  const animation = useRef<Lottie>(null)
+  const dispatch = useDispatch()
+
+  const coffee = route.params?.data as CoffeesData
 
   const [quantity, setQuantity] = useState(1)
+  const [cupSize, setCupSize] = useState(1)
+  const [cupPrice, setCupPrice] = useState(coffee.price)
+  const [like, setLike] = useState(false)
 
-  const coffee: CoffeesData = route.params.data
+  useEffect(() => {
+    const [real, centavos] = coffee.price.split(',')
+
+    const converted = Number(real + centavos)
+
+    switch (cupSize) {
+      case 1:
+        const PriceHandler = String(converted * 1 * quantity)
+
+        const formatedPrice = FormatedPrice(PriceHandler)
+
+        setCupPrice(formatedPrice)
+        break;
+
+      case 2:
+        const PriceHandler400 = String(converted * 1.3 * quantity)
+
+        const formatedPrice400 = FormatedPrice(PriceHandler400)
+
+        setCupPrice(formatedPrice400)
+        break;
+
+      case 3:
+        const PriceHandler500 = String(converted * 1.6 * quantity)
+
+        const formatedPrice500 = FormatedPrice(PriceHandler500)
+
+        setCupPrice(formatedPrice500)
+        break;
+
+      default:
+        break;
+    }
+  }, [cupSize, quantity])
+
+  const handleSelectedCupSize = useCallback((size: number) => {
+    setCupSize(size)
+  }, [])
 
   const handleIncreaseQuantity = useCallback(() => {
     setQuantity(quantity + 1)
@@ -60,6 +112,24 @@ const Details: React.FC = () => {
     }
     setQuantity(quantity - 1)
   }, [quantity])
+
+  const handleLikedCoffees = useCallback(() => {
+    setLike(!like)
+    like === true ? animation.current?.play() : animation.current?.reset()
+  }, [like])
+
+  const handleAddItemsToCart = useCallback(() => {
+    const product = {
+      id: coffee.id,
+      image: coffee.CoffeImage,
+      name: coffee.CoffeName,
+      price: cupPrice,
+      quantity
+    }
+
+    dispatch(addProductsToCart(product))
+    goBack()
+  }, [dispatch, coffee.id, coffee.CoffeName, coffee.CoffeImage, cupPrice, quantity])
 
   return (
     <Container>
@@ -81,13 +151,34 @@ const Details: React.FC = () => {
         <OptionsContainer>
           <OptionsTitleContainer>
             <OptionsTitleSize>Tamanho:</OptionsTitleSize>
-            <OptionsCoffePrice>R$: {coffee.price}</OptionsCoffePrice>
+            <OptionsCoffePrice>R$: {cupPrice}</OptionsCoffePrice>
           </OptionsTitleContainer>
           <OptionsSelection>
             <CupsSize>
-              <Feather name='coffee' size={44} color='#10d1a4'/>
-              <Feather name='coffee' size={39} color='#10d1a4'/>
-              <Feather name='coffee' size={34} color='#10d1a4'/>
+              <CupSizeTextButton onPress={() => handleSelectedCupSize(3)}>
+                <Feather 
+                  name='coffee' 
+                  size={44} 
+                  color={cupSize === 3 ? '#10d1a4' : '#c2f4eb'}
+                />
+                <CupSizeText isSelected={cupSize === 3}>500ml</CupSizeText>
+              </CupSizeTextButton>
+              <CupSizeTextButton onPress={() => handleSelectedCupSize(2)}>
+                <Feather 
+                  name='coffee' 
+                  size={39} 
+                  color={cupSize === 2 ? '#10d1a4' : '#c2f4eb'}
+                />
+                <CupSizeText isSelected={cupSize === 2}>400ml</CupSizeText>
+              </CupSizeTextButton>
+              <CupSizeTextButton onPress={() => handleSelectedCupSize(1)}>
+                <Feather 
+                  name='coffee' 
+                  size={34}
+                  color={cupSize === 1 ? '#10d1a4' : '#c2f4eb'}
+                />
+                <CupSizeText isSelected={cupSize === 1}>300ml</CupSizeText>
+              </CupSizeTextButton>
             </CupsSize>
             <QuantityContainer>
               <SumButtons onPress={handleDecreaseQuantity}>
@@ -105,10 +196,18 @@ const Details: React.FC = () => {
           <Description>{coffee.CoffeDescription}</Description>
         </DescriptionContainer>
         <ConfirmPaymentDetails>
-            <LikeContainer>
-              <Feather name='heart' size={30} color='#10d1a4'/>
+            <LikeContainer onPress={handleLikedCoffees}>
+                <Lottie 
+                ref={animation}
+                source={HeartAnimation}
+                resizeMode='contain'
+                loop={false}
+                style={{
+                  width: 60,
+                }}
+              />
             </LikeContainer>
-            <ConfirmPaymentButton>
+            <ConfirmPaymentButton onPress={handleAddItemsToCart}>
               <ConfirmPaymentButtonText>Adicionar a sacola</ConfirmPaymentButtonText>
             </ConfirmPaymentButton>
           </ConfirmPaymentDetails>

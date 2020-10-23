@@ -27,15 +27,10 @@ const Home: React.FC = () => {
     outputRange: [0, 20],
   })
 
-  const translateY = animated.interpolate({
-    inputRange: [0, 1], 
-    outputRange: [0, 10],
-  })
-
   return (
     <Host style={{backgroundColor: '#000'}}>
       <ContainerAnimated ModelIsOpen={modalOpen} style={{
-        transform: [{ scale, translateY }], borderRadius
+        transform: [{ scale }], borderRadius
       }}>
         <StatusBar style={modalOpen ? 'light' : 'dark'}/>
           <Header />

@@ -1,7 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {Feather,  } from '@expo/vector-icons'
+import { useSelector, useDispatch } from 'react-redux'
 
-import api from '../../services/api';
+import { IState } from '../../store/redux';
+import { IItemsData } from '../../store/modules/cart/cartTypes';
+import { RemoveProductsToCart } from '../../store/modules/cart/actions';
 
 import { 
   Container, 
@@ -26,23 +29,13 @@ import {
   ConfirmPaymentButtonText,
 } from './styles';
 
-interface CoffeesInfo {
-  id: number;
-  CoffeImage: string;
-  CoffeName: string;
-  price: string;
-}
-
 const Cart: React.FC = () => {
-  const [CoffesList, setCoffesList] = useState<CoffeesInfo[]>([])
+  const cartList = useSelector<IState, IItemsData[]>(state => state.cart.items)
+  const dispatch = useDispatch()
 
-  useEffect(() => {
-    async function loadData() {
-      const response = await api.get<CoffeesInfo[]>('Coffees')
-      setCoffesList(response.data)
-    }
-    loadData()
-  }, [] )
+  const handleRemoveItem = useCallback((item: IItemsData) => {
+    dispatch(RemoveProductsToCart(item))
+  }, [])
 
   return (
     <Container>
@@ -50,15 +43,15 @@ const Cart: React.FC = () => {
       <ScrollList
       showsVerticalScrollIndicator={false}      
     >
-      {CoffesList.map((item: CoffeesInfo) => (
+      {cartList.map((item: IItemsData) => (
         <ItemContainer key={item.id}>
-          <CoffeeImage source={{uri: item.CoffeImage}}/>
+          <CoffeeImage source={{uri: item.image }}/>
           <CoffeeInfo>
-            <CoffeName>{item.CoffeName}</CoffeName>
-            <CoffeDescription>Quantidade 2</CoffeDescription>
+            <CoffeName>{item.name}</CoffeName>
+            <CoffeDescription>Quantidade {item.quantity}</CoffeDescription>
             <CoffePrice>R$: {item.price}</CoffePrice>
           </CoffeeInfo>
-          <RemoveButton>
+          <RemoveButton onPress={() => handleRemoveItem(item)}>
             <RemoveButtonText>Remover</RemoveButtonText>
           </RemoveButton>
         </ItemContainer>

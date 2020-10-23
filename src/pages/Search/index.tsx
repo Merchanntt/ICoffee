@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Dimensions, ScrollView } from 'react-native';
+import { Dimensions, FlatList, ScrollView, ViewToken } from 'react-native';
 import {Feather} from '@expo/vector-icons'
+import api from '../../services/api';
 
 import FilteredSearch from '../../components/FilteredSearch';
 
@@ -16,7 +17,6 @@ import {
   GreenBorder,
   Border,
 } from './styles';
-import api from '../../services/api';
 
 interface CategoriesListData {
   id: number;
@@ -24,12 +24,15 @@ interface CategoriesListData {
 }
 
 const Search: React.FC = () => {
-  const scrollable = useRef<ScrollView>(null)
+  const scrollable = useRef<FlatList>(null)
+  const categoryList = useRef<FlatList>(null)
   
   const [categories, setCategories] = useState<CategoriesListData[]>([])
 
   const [searchValue, setSearchValue] = useState('')
+
   const [isSelected, setSelected] = useState(0)
+  const [isViewable, setIsViewable] = useState(0)
 
   useEffect(() => {
     api.get('Categories').then(response => {
@@ -38,16 +41,21 @@ const Search: React.FC = () => {
   }, [])
 
   const handleIsSelectedCategory = useCallback((CategoryIndex: number) => {
-    const scrollingRange = Dimensions.get('window').width * CategoryIndex
-
       setSelected(CategoryIndex)
-      scrollable.current?.scrollTo({x: scrollingRange, y: 0, animated: true})
+      scrollable.current?.scrollToIndex({animated: true, index: CategoryIndex}) 
+      categoryList.current?.scrollToIndex({animated: true, index: CategoryIndex}) 
+  }, [])
+
+  const handleSetViewAble = useCallback(({viewableItems}) => {
+    const objectedItems = viewableItems.pop()
+
+    setIsViewable(objectedItems.index)
   }, [])
 
   const handleSetSelectedCategory = useCallback(() => {
-    // setSelected(isSelected - 1)
-  }, [])
-
+    setSelected(isViewable)
+    categoryList.current?.scrollToIndex({animated: true, index: isViewable}) 
+  }, [isViewable])
 
   return (
     <Container>
@@ -65,7 +73,9 @@ const Search: React.FC = () => {
         </SearchContainer>
       </Header>
         <CategoriesList 
+          ref={categoryList}
           data={categories}
+          decelerationRate= {0}
           horizontal
           showsHorizontalScrollIndicator={false}
           keyExtractor={item => item.id}
@@ -82,22 +92,25 @@ const Search: React.FC = () => {
           )}
         />
         <Border />
-        <ScrollView
-          horizontal
+        <FlatList 
           ref={scrollable}
+          data={categories}
+          horizontal
           snapToInterval={Dimensions.get('window').width}
           showsHorizontalScrollIndicator={false}
+          onViewableItemsChanged={handleSetViewAble}
+          onTouchEnd={handleSetSelectedCategory}
           decelerationRate= {0}
-          onMomentumScrollEnd={handleSetSelectedCategory}
-        >
-          {categories.map(category => (
+          keyExtractor={item => item.id}
+          renderItem={({item}) => (
               <FilteredSearch 
-                key={category.id}
+                key={item.id}
                 searchValue={searchValue} 
-                categoryValue={category.CategoryName}
+                categoryValue={item.CategoryName}
               />
-          ))}
-        </ScrollView>
+            )
+          }
+        />
     </Container>
   );
 }

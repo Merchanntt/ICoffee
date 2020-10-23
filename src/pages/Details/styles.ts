@@ -1,6 +1,9 @@
-import { RectButton } from 'react-native-gesture-handler';
+import { RectButton , BorderlessButton } from 'react-native-gesture-handler';
+import styled from 'styled-components/native';
 
-import styled from 'styled-components/native'
+interface CupSizeTextProps {
+  isSelected: boolean;
+}
 
 export const Container = styled.View`
   flex: 1;
@@ -90,6 +93,17 @@ export const CupsSize = styled.View`
   width: 140px;
 `;
 
+export const CupSizeTextButton = styled(BorderlessButton)`
+  align-items: center;
+  justify-content: center;
+`;
+
+export const CupSizeText = styled.Text<CupSizeTextProps>`
+  font-size: 10px;
+  color: ${props => props.isSelected ? '#10d1a4' : '#c2f4eb'};
+  font-weight: 600;
+`;
+
 export const QuantityContainer = styled.View`
   width: 90px;
   height: 30px;
@@ -140,13 +154,14 @@ export const Description = styled.Text`
   font-weight: 500;
   margin-top: 5px;
 `;
-export const LikeContainer = styled(RectButton)`
+export const LikeContainer = styled(BorderlessButton)`
   width: 45px;
   height: 45px;
   border-radius: 22px;
   background-color: #c2f4eb;
   justify-content: center;
   align-items: center;
+  overflow: visible;
 `;
 
 export const ConfirmPaymentDetails = styled.View`

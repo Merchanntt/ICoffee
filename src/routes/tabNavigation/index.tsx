@@ -1,16 +1,23 @@
 import React from 'react';
 import {Feather} from '@expo/vector-icons'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useSelector } from 'react-redux';
 
 import Home from '../../pages/Home';
 import Search from '../../pages/Search';
 import Cart from '../../pages/Cart';
 import Profile from '../../pages/Profile';
 import { Platform } from 'react-native';
+import { IState } from '../../store/redux';
+import { IItemsData } from '../../store/modules/cart/cartTypes';
 
 const {Navigator, Screen} = createBottomTabNavigator()
 
 const TabRoutes: React.FC = () => {
+  const cartItems = useSelector<IState, IItemsData[]>(state => state.cart.items)
+
+  const cartQuantity = cartItems.length
+
   return (
       <Navigator 
       tabBarOptions={{
@@ -75,7 +82,7 @@ const TabRoutes: React.FC = () => {
           component={Cart}
           options={{
             tabBarLabel: '',
-            tabBarBadge: 3,
+            tabBarBadge: cartQuantity === 0 ? undefined : cartQuantity,
             tabBarIcon: ({color, size, focused}) => (
               <Feather name='shopping-bag' size={size} color={focused ? '#10d1a4' : color }/>
             )
