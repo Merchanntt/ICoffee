@@ -5,10 +5,13 @@ import { useSelector, useDispatch } from 'react-redux'
 import { IState } from '../../store/redux';
 import { IItemsData } from '../../store/modules/cart/cartTypes';
 import { RemoveProductsToCart } from '../../store/modules/cart/actions';
+import PricesHandler from '../../services/formatedPrice';
 
 import { 
   Container, 
   Title,
+  DefaultView,
+  DefaultText,
   ScrollList,
   ItemContainer,
   CoffeeImage,
@@ -28,40 +31,77 @@ import {
   ConfirmPaymentButton,
   ConfirmPaymentButtonText,
 } from './styles';
+import { View } from 'react-native';
+
+export interface CartList {
+  id: number;
+  image: string;
+  name: string;
+  price: string;
+  quantity: number;
+}
 
 const Cart: React.FC = () => {
-  const cartList = useSelector<IState, IItemsData[]>(state => state.cart.items)
-  const dispatch = useDispatch()
+  const cartList = useSelector<IState, IItemsData[]>(state => state.cart.items);
+  const dispatch = useDispatch();
+  const pricesHandler = new PricesHandler();
 
-  const handleRemoveItem = useCallback((item: IItemsData) => {
+  const [items, setItems] = useState<CartList[]>([]);
+  const [totalPrice, setTotalPrice] = useState('0,00');
+  const [totalPriceWithDelivery, setTotalwithDelivery] = useState('0,00');
+  
+  const handleRemoveItem = useCallback((item: CartList) => {
     dispatch(RemoveProductsToCart(item))
   }, [])
+
+  useEffect(() => {
+    const total = cartList.map((item: IItemsData) => ({
+      ...item,
+      price: pricesHandler.FormatedPrice(item.price)
+    }))
+    setItems(total)
+  }, [cartList])
+
+  useEffect(() => {
+    const [total, totalWithDelivery] = pricesHandler.TotalPrice(cartList)
+    setTotalPrice(total)
+    setTotalwithDelivery(totalWithDelivery)
+  }, [cartList])
 
   return (
     <Container>
         <Title>Minha sacola</Title>
-      <ScrollList
-      showsVerticalScrollIndicator={false}      
-    >
-      {cartList.map((item: IItemsData) => (
-        <ItemContainer key={item.id}>
-          <CoffeeImage source={{uri: item.image }}/>
-          <CoffeeInfo>
-            <CoffeName>{item.name}</CoffeName>
-            <CoffeDescription>Quantidade {item.quantity}</CoffeDescription>
-            <CoffePrice>R$: {item.price}</CoffePrice>
-          </CoffeeInfo>
-          <RemoveButton onPress={() => handleRemoveItem(item)}>
-            <RemoveButtonText>Remover</RemoveButtonText>
-          </RemoveButton>
-        </ItemContainer>
-      ))}
-      </ScrollList>
+      {items.length === 0 
+        ? (
+          <DefaultView >
+            <Feather name='shopping-bag' size={72} color='#f5bdc8'/>
+            <DefaultText>Você ainda não adicionou nada{'\n'} a sua sacola :(</DefaultText>
+          </DefaultView>
+        )
+        : (
+          <ScrollList
+          >
+            {items.map((item: CartList) => (
+              <ItemContainer key={item.id}>
+                <CoffeeImage source={{uri: item.image }}/>
+                <CoffeeInfo>
+                  <CoffeName>{item.name}</CoffeName>
+                  <CoffeDescription>Quantidade {item.quantity}</CoffeDescription>
+                  <CoffePrice>{item.price}</CoffePrice>
+                </CoffeeInfo>
+                <RemoveButton onPress={() => handleRemoveItem(item)}>
+                  <RemoveButtonText>Remover</RemoveButtonText>
+                </RemoveButton>
+              </ItemContainer>
+            ))}
+            </ScrollList>
+        )
+      }
       <PaymentContainer>
         <PaymentDetails>
           <ServicesDetails>
             <ServiceTitle>Subtotal</ServiceTitle>
-            <ServicePrice>R$: 15,00</ServicePrice>
+            <ServicePrice>{totalPrice}</ServicePrice>
           </ServicesDetails>
           <ServicesDetails>
             <ServiceTitle>Delivery</ServiceTitle>
@@ -71,7 +111,7 @@ const Cart: React.FC = () => {
         <ConfirmPaymentContainer>
           <ServicesDetails>
             <ServiceTitle>Total</ServiceTitle>
-            <ServicePrice>R$: 22,00</ServicePrice>
+            <ServicePrice>{totalPriceWithDelivery}</ServicePrice>
           </ServicesDetails>
           <ConfirmPaymentDetails>
             <ConfirmPaymentButton>

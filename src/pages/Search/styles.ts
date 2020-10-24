@@ -23,7 +23,8 @@ export const Header = styled.View`
 
 export const Title = styled.Text`
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 700;
+  color: #88888a;
 `;
 
 export const SearchContainer = styled.View`

@@ -151,7 +151,7 @@ export const Description = styled.Text`
   font-size: 12px;
   line-height: 16px;
   color: #88888a;
-  font-weight: 500;
+  font-weight: 400;
   margin-top: 5px;
 `;
 export const LikeContainer = styled(BorderlessButton)`

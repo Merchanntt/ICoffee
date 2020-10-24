@@ -9,7 +9,7 @@
       "CoffeName": "Caramel Ribbon Crunch Freppuccino®",
       "CoffeCategory": "Blended Beverage",
       "CoffeDescription": "Buttery caramel syrup blended with coffee, milk and ice, then topped with a layer of dark caramel sauce, whipped cream, caramel drizzle and a crunchy caramel-sugar topping—oh-so-beautifully delicious.",
-      "price": "12,00"
+      "price": 12.00
     },
     {
       "id": 2,
@@ -20,7 +20,7 @@
       "CoffeName": "Starbucks Doubleshot® on Ice",
       "CoffeCategory": "Cold Coffees",
       "CoffeDescription": "Made with the rich, full-bodied espresso you love that's been chilled and mellowed with a touch of milk and sweetness. This on-the-go drink is delightfully and deliciously convenient.",
-      "price": "15,00"
+      "price": 15.00
     },
     {
       "id": 3,
@@ -31,7 +31,7 @@
       "CoffeName": "Espresso",
       "CoffeCategory": "Hot Coffees",
       "CoffeDescription": "Our smooth signature Espresso Roast with rich flavor and caramelly sweetness is at the very heart of everything we do.",
-      "price": "8,00"
+      "price": 8.00
     },
     {
       "id": 4,
@@ -42,7 +42,7 @@
       "CoffeName": "Cappuccino",
       "CoffeCategory": "Hot Coffees",
       "CoffeDescription": "Dark, rich espresso lies in wait under a smoothed and stretched layer of thick milk foam. An alchemy of barista artistry and craft.",
-      "price": "10,00"
+      "price": 10.00
     },
     {
       "id": 5,
@@ -53,7 +53,7 @@
       "CoffeName": "Iced Caffè Americano",
       "CoffeCategory": "Cold Coffees",
       "CoffeDescription": "Espresso shots topped with cold water produce a light layer of crema, then served over ice. The result: a wonderfully rich cup with depth and nuance.",
-      "price": "18,00"
+      "price": 18.00
     },
     {
       "id": 6,
@@ -64,7 +64,7 @@
       "CoffeName": "Guava Black Iced Tea Lemonade",
       "CoffeCategory": "Iced Teas",
       "CoffeDescription": "Boldly flavored iced tea made with a combination of our guava-flavored fruit juice blend, Teavana® iced black tea and lemonade, then sweetened with liquid cane sugar and hand-shaken with ice. A refreshing lift to any day.",
-      "price": "14,00"
+      "price": 14.00
     }
   ],
   "Categories": [

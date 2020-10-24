@@ -31,7 +31,7 @@ export const CoffeName = styled.Text`
   font-size: 14px;
   max-width: 180px;
   margin-bottom: 6px;
-  font-weight: 500;
+  font-weight: 600;
   color: #88888a;
 `;
 

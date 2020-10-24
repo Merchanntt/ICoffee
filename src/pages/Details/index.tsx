@@ -6,7 +6,7 @@ import { Feather } from '@expo/vector-icons';
 import Lottie from 'lottie-react-native';
 import {useDispatch} from 'react-redux';
 
-import { FormatedPrice } from '../../services/formatedPrice';
+import FormatedPrice from '../../services/formatedPrice';
 import { addProductsToCart } from '../../store/modules/cart/actions';
 import HeartAnimation from '../../assets/HeartAnimation.json';
 
@@ -47,7 +47,7 @@ interface CoffeesData {
   CoffeName: string;
   CoffeCategory: string;
   CoffeDescription: string;
-  price: string;
+  price: number;
 }
 
 const Details: React.FC = () => {
@@ -55,42 +55,43 @@ const Details: React.FC = () => {
   const {goBack} = useNavigation()
   const animation = useRef<Lottie>(null)
   const dispatch = useDispatch()
+  const formatingPrice = new FormatedPrice()
 
   const coffee = route.params?.data as CoffeesData
 
   const [quantity, setQuantity] = useState(1)
   const [cupSize, setCupSize] = useState(1)
-  const [cupPrice, setCupPrice] = useState(coffee.price)
+  const [formatedCupPrice, setFormatedCupPrice] = useState('R$: 0,00')
+  const [cupPrice, setCupPrice] = useState(0)
   const [like, setLike] = useState(false)
 
   useEffect(() => {
-    const [real, centavos] = coffee.price.split(',')
-
-    const converted = Number(real + centavos)
-
     switch (cupSize) {
       case 1:
-        const PriceHandler = String(converted * 1 * quantity)
+        const PriceHandler = coffee.price * 1 * quantity
 
-        const formatedPrice = FormatedPrice(PriceHandler)
+        const formatedPrice = formatingPrice.FormatedPrice(PriceHandler)
 
-        setCupPrice(formatedPrice)
+        setCupPrice(PriceHandler)
+        setFormatedCupPrice(formatedPrice)
         break;
 
       case 2:
-        const PriceHandler400 = String(converted * 1.3 * quantity)
+        const PriceHandler400 = coffee.price * 1.3 * quantity
 
-        const formatedPrice400 = FormatedPrice(PriceHandler400)
-
-        setCupPrice(formatedPrice400)
+        const formatedPrice400 = formatingPrice.FormatedPrice(PriceHandler400)
+        
+        setCupPrice(PriceHandler400)
+        setFormatedCupPrice(formatedPrice400)
         break;
 
       case 3:
-        const PriceHandler500 = String(converted * 1.6 * quantity)
+        const PriceHandler500 = coffee.price * 1.6 * quantity
 
-        const formatedPrice500 = FormatedPrice(PriceHandler500)
+        const formatedPrice500 = formatingPrice.FormatedPrice(PriceHandler500)
 
-        setCupPrice(formatedPrice500)
+        setCupPrice(PriceHandler500)
+        setFormatedCupPrice(formatedPrice500)
         break;
 
       default:
@@ -115,7 +116,8 @@ const Details: React.FC = () => {
 
   const handleLikedCoffees = useCallback(() => {
     setLike(!like)
-    like === true ? animation.current?.play() : animation.current?.reset()
+    
+    !like ? animation.current?.play() : animation.current?.reset()
   }, [like])
 
   const handleAddItemsToCart = useCallback(() => {
@@ -151,7 +153,7 @@ const Details: React.FC = () => {
         <OptionsContainer>
           <OptionsTitleContainer>
             <OptionsTitleSize>Tamanho:</OptionsTitleSize>
-            <OptionsCoffePrice>R$: {cupPrice}</OptionsCoffePrice>
+            <OptionsCoffePrice>{formatedCupPrice}</OptionsCoffePrice>
           </OptionsTitleContainer>
           <OptionsSelection>
             <CupsSize>

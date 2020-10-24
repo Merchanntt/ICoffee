@@ -1,7 +1,8 @@
 import React, {useState, useEffect, useCallback } from 'react';
-import {Dimensions, FlatListProps} from 'react-native'
+import {Dimensions} from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import api from '../../services/api';
+import PriceHanlder from '../../services/formatedPrice';
 
 import { 
   SearchList,
@@ -13,11 +14,11 @@ import {
   CoffePrice,
 } from './styles';
 
-interface SeachedCoffesData {
+interface SearchedCoffesData {
   id: number;
   CoffeName: string;
   CoffeDescription: string;
-  price: string;
+  price: number;
 }
 
 interface ItemId {
@@ -30,7 +31,9 @@ interface FilteredSearchProps {
 }
 
 const FilteredSearch: React.FC<FilteredSearchProps> = ({ categoryValue, searchValue }) => {
-  const [searchedCoffes, setSearchedCoffes] = useState<SeachedCoffesData[]>([])
+  const [searchedCoffes, setSearchedCoffes] = useState<SearchedCoffesData[]>([])
+  const [unformatedPrices, setUnformatedPrices] = useState<number[]>([])
+  const priceHanlder = new PriceHanlder()
 
   const {navigate} = useNavigation()
   
@@ -41,13 +44,22 @@ const FilteredSearch: React.FC<FilteredSearchProps> = ({ categoryValue, searchVa
         CoffeCategory_like: categoryValue === 'Todos' ? '' : categoryValue
       }
     }).then(response => {
-      setSearchedCoffes(response.data)
+      setUnformatedPrices(response.data.map((item: SearchedCoffesData) => item.price))
+      setSearchedCoffes(response.data.map((item: SearchedCoffesData) => ({
+        ...item,
+        price: priceHanlder.FormatedPrice(item.price)
+      })))
     })
   }, [searchValue])
 
-  const handleNavigateToDetails = useCallback((data) => {
+  const handleNavigateToDetails = useCallback((item, itemIndex) => {
+    const price = unformatedPrices.find((item, index) => index === itemIndex)
+    const data = {
+      ...item,
+      price
+    }
     navigate('Detail', {data})
-  }, [navigate])
+  }, [navigate, unformatedPrices])
 
   return (
     <SearchList 
@@ -57,14 +69,14 @@ const FilteredSearch: React.FC<FilteredSearchProps> = ({ categoryValue, searchVa
         width: Dimensions.get('window').width,
       }}
       keyExtractor= {(item: ItemId) => String(item.id)}
-      renderItem= {({ item }) => (
-        <ItemContainer onPress={() => handleNavigateToDetails(item)}>
+      renderItem= {({ item, index }) => (
+        <ItemContainer onPress={() => handleNavigateToDetails(item, index)}>
           <CoffeeImage source={{uri: item.CoffeImage}}/>
           <CoffeeInfo>
             <CoffeName>{item.CoffeName}</CoffeName>
             <CoffeDescription>{item.CoffeDescription} </CoffeDescription>
           </CoffeeInfo>
-            <CoffePrice>R$: {item.price}</CoffePrice>
+            <CoffePrice>{item.price}</CoffePrice>
       </ItemContainer>
       )}
     />  

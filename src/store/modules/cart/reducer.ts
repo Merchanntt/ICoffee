@@ -11,7 +11,7 @@ const Cart: Reducer<ICartState> = (state = INITIAL_STATE, action) => {
     switch (action.type) {
       case 'ADD_PRODUCTS_TO_CART': {
         const { product } = action.payload;
-        
+
         draft.items.push(product)
         
         break

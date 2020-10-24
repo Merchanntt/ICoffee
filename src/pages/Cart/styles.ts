@@ -9,12 +9,31 @@ export const Container = styled.View`
 
 export const Title = styled.Text`
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 700;
   align-self: center;
   margin-top: 20px;
   padding-bottom: 10px;
+  color: #88888a;
 `;
 
+export const DefaultView = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 10px;
+  max-height: 330px;
+  padding-right: 10px;
+  padding-left: 10px;
+`;
+
+export const DefaultText = styled.Text`
+  margin-top: 10px;
+  color: #88888a;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  opacity: 0.6;
+`;
 
 export const ScrollList = styled.ScrollView`
   flex: 1;
@@ -48,7 +67,7 @@ export const CoffeName = styled.Text`
   font-size: 14px;
   max-width: 200px;
   margin-bottom: 6px;
-  font-weight: 500;
+  font-weight: 600;
   color: #88888a;
 `;
 

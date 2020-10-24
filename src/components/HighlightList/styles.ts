@@ -37,6 +37,7 @@ export const CoffeShopInfo = styled.View`
 export const CoffeShopName = styled.Text`
   color: #fff;
   font-size: 14px;
+  font-weight: 600;
 `;
 
 export const CoffeShopLocale = styled.Text`
@@ -53,6 +54,7 @@ export const BeverageName = styled.Text`
   font-size: 10px;
   line-height: 12px;
   max-width: 210px;
+  font-weight: 600;
 `;
 
 export const BeverageCategory = styled.Text`

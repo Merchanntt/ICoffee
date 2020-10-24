@@ -1,3 +1,4 @@
+import { CartList } from "../../../pages/Cart";
 import { IItemsData } from "./cartTypes";
 
 export function addProductsToCart(product: IItemsData) {
@@ -9,7 +10,7 @@ export function addProductsToCart(product: IItemsData) {
   }
 }
 
-export function RemoveProductsToCart(product: IItemsData) {
+export function RemoveProductsToCart(product: CartList) {
   return {
     type: 'REMOVE_PRODUCTS_TO_CART',
     payload: {

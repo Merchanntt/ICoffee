@@ -15,6 +15,7 @@ export const ScrollList = styled.ScrollView`
 export const ListTitle = styled.Text`
   font-size: 16px;
   font-weight: bold;
+  color: #88888a;
 `;
 
 export const ItemContainer = styled(BorderlessButton)`
@@ -41,7 +42,7 @@ export const CoffeName = styled.Text`
   font-size: 14px;
   max-width: 200px;
   margin-bottom: 6px;
-  font-weight: 500;
+  font-weight: 600;
   color: #88888a;
 `;
 
